@@ -1,0 +1,4 @@
+Timing = numpy_color2gray 
+Average runtime running numpy_color2gray after 3 runs :0.009036466666666668 seconds 
+Averagely 51.21 faster than python 
+Timing performed using: timeit

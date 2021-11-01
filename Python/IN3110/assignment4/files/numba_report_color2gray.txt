@@ -1,0 +1,4 @@
+Timing = numba_color2gray 
+Average runtime running numba_color2gray after 3 runs :0.10160499999999999 seconds 
+Averagely 11.24 faster than numpy_color2gray 
+Timing performed using: timeit

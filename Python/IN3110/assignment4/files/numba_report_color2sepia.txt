@@ -1,0 +1,4 @@
+Timing = numba_color2sepia 
+Average runtime running numba_color2sepia after 3 runs :0.15638293333333333 seconds 
+Averagely 17.31 faster than numpy_color2sepia 
+Timing performed using: timeit

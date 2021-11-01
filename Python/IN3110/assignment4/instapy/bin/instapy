@@ -1,0 +1,82 @@
+#!/usr/bin/env/python
+import cv2
+from instapy import python_color2gray
+from instapy import numpy_color2gray
+from instapy import numba_color2gray
+from instapy import python_color2sepia
+from instapy import numpy_color2sepia
+from instapy import numba_color2sepia
+import timeit
+
+
+def sepia_image(image_filename, method, outfile_name , scale= 1):
+    runs = 1
+    if args.runtime:
+        runs = 3
+        start = timeit.default_timer()
+    for i in range(runs):
+        if method == 'numpy':
+            s_image = numpy_color2sepia(image_filename, outfile_name, scale)
+        elif method == 'numba':
+            s_image = numba_color2sepia(image_filename, outfile_name, scale)
+        elif method == 'python':
+            s_image = python_color2sepia(image_filename, outfile_name, scale)
+        else:
+            raise Exception('Please use one of these methods: numpy, numba or python')
+            parser.print_help()
+
+    if args.runtime:
+        stop = timeit.default_timer()
+        time = (stop - start) / 3
+        print(f"Average time over 3 runs : {time}")
+    if outfile_name is not None:
+        cv2.imwrite(outfile_name, cv2.cvtColor(s_image, cv2.COLOR_RGB2BGR))
+    return s_image
+
+def grayscale_image(image_filename, method, outfile_name , scale= 1):
+    runs = 1
+    if args.runtime:
+        runs = 3
+        start = timeit.default_timer()
+    for i in range(runs):
+        if method == 'numpy':
+            g_image = numpy_color2gray(image_filename, outfile_name, scale)
+        elif method == 'numba':
+            g_image = numba_color2gray(image_filename, outfile_name, scale)
+        elif method == 'python':
+            g_image = python_color2gray(image_filename, outfile_name, scale)
+        else:
+            Exception('Please use one of these methods: numpy, numba or python')
+    if args.runtime:
+        stop = timeit.default_timer()
+        time = (stop-start)/3
+        print(f"Average time over 3 runs : {time}")
+    if outfile_name is not None:
+        cv2.imwrite(outfile_name, cv2.cvtColor(g_image, cv2.COLOR_RGB2BGR))
+    return g_image
+
+def main():
+    if args.sepia:
+        sepia_image(args.file, args.implement, args.out, args.scale)
+    elif args.gray:
+        grayscale_image(args.file, args.implement, args.out, args.scale)
+    else:
+        raise Exception("Please choose filter, gray or sepia")
+
+if __name__ == "__main__":
+    import argparse
+    parser = argparse.ArgumentParser(description= "CLI Instapy")
+
+    parser.add_argument("-f", "--file", action= "store", dest= "file", required= "True",
+                        help='Which image do you want to apply a filter to?')
+
+    parser.add_argument('-se', "--sepia", action = "store_true", help = "Sepia filter")
+    parser.add_argument('-1', "--implement", action= "store", choices= ('python', 'numpy', 'numba'), help = "Which implemtation do you want. chose between numpy, python and numba")
+    parser.add_argument('g', "--gray", action="store_true", help="Gray filter")
+    parser.add_argument('-sc', '--scale', action= "store", dest="scale", type=float, help= "scale factor")
+    parser.add_argument('-o', '--out', action="store", dest = "out", help = "the output filenae")
+    parser.add_argument('-r', '--runtime', action="store_true",
+                        help="Average runtime of the chosen method")
+    args = (parser.parse_args())
+    main()
+
